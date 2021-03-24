@@ -2,7 +2,7 @@
   "name": "ice9",
   "version": "1.0.0",
   "description": "ICE9",
-  "main": "server.js",
+  "main": "index.js",
   "repository": "https://github.com/Tomelinski/Webd6201-ICE9.git",
   "author": "Tomelinski <tomzielinski@live.ca>",
   "license": "MIT",
@@ -11,7 +11,7 @@
     "npm": "^6.1.0"
   },
   "scripts": {
-    "start": "node server.js"
+    "start": "node index.js"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.15.3",
