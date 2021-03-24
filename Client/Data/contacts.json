@@ -1,0 +1,26 @@
+{
+    "contacts":
+    [
+        {
+            "FullName":"Tom Zielinski",
+            "ContactNumber":"9051231234",
+            "Email":"Tom.Zielinski@dcmail.ca"
+        },
+        {
+            "FullName":"Calvin May",
+            "ContactNumber":"90598798765",
+            "Email":"Calvin.May@dcmail.ca"
+        },
+        {
+            "FullName":"Chantal Ho",
+            "ContactNumber":"9051234321",
+            "Email":"Chantal.Ho@dcmail.ca"
+        },
+        {
+            "FullName":"Jeremy Mclellan",
+            "ContactNumber":"9051111111",
+            "Email":"JeremyMclellan@dcmail.ca"
+        }
+    ]
+
+}
