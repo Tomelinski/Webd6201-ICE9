@@ -2,7 +2,7 @@
   "name": "ice9",
   "version": "1.0.0",
   "description": "ICE9",
-  "main": "index.js",
+  "main": "server.js",
   "repository": "https://github.com/Tomelinski/Webd6201-ICE9.git",
   "author": "Tomelinski <tomzielinski@live.ca>",
   "license": "MIT",

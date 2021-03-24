@@ -4,7 +4,7 @@
  * Module dependencies.
  */
 
-let app = require('../app');
+let app = require('./app');
 const debug = require('debug')('ice9:server');
 const http = require('http');
 
