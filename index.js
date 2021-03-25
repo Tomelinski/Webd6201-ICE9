@@ -4,7 +4,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 let app = require('./app');
 const debug = require('debug')('ice9:server');
 const http = require("http");
-let port = normalizePort(process.env.PORT || '3000');
+const port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
 const server = http.createServer(app);
 server.listen(port);
