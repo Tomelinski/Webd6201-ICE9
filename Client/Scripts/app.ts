@@ -1,114 +1,8 @@
 
 
 namespace core {
-  
 
-  function addLinkEvents(){
-    $("ul>li>a").off("click");
-    $("ul>li>a").off("mouseover");
-
-    $("ul>li>a").on("click", function(){
-      sessionStorage.clear();
-
-      loadLink($(this).attr("id"));
-    });
-
-    $("ul>li>a").on("mouseover", function(){
-        $(this).css('cursor', 'pointer');
-    });
-  }
-
-  /**
-   * highlight the active link in the navbar
-   * 
-   * @param link 
-   * @param data 
-   */
-  function highlightActiveLink(link:string):void{
-    //remove old highlighted link
-    $(`#${router.ActiveLink}`).removeClass("active");
-    
-    if (link == "logout") {
-      sessionStorage.clear();
-      router.ActiveLink = "login";
-    }else{
-      router.ActiveLink = link;
-    }
-    //highlight new active link
-    $(`#${router.ActiveLink}`).addClass("active");
-  }
-  
-  /**
-   * this method switches page content relative to the link that is passed into the function
-   * optionally, link data can also be passed
-   *
-   * @param {string} link
-   * @param {string} [data=""]
-   */
-  function loadLink(link:string, data:string = ""):void{
-    
-    
-    highlightActiveLink(link);
-    router.LinkData = data;
-    
-    loadContent(router.ActiveLink, CallBack(router.ActiveLink));
-    
-    history.pushState({}, "", router.ActiveLink);
-  }
-  
-  /**
- * inject nav bar into header element and highlight active link
- *
- * @param {string} pageName
- */
-function loadHeader(pageName:string):void{
-  //inject header
-  $.get("./components/header.html", function(data){
-    $("header").html(data);
-
-    $(`#${pageName}`).addClass("active");
-
-    addLinkEvents();
-  });
-
-}
-
-/**
- *inject page into content section
- *
- * @param {string} pageName
- * @param {function} callback
- */
-function loadContent(pageName:string, callback:Function):void{
-  $.get(`./content/${pageName}.html`, function(data){
-    $("main").html(data);
-    displayLogout();
-    callback();
-  });
-
-}
-/**
- *this function loads the page footer
- *
- */
-function loadFooter():void{
-      //inject footer
-      $.get("./components/footer.html", function(data){
-        $("footer").html(data);
-      });
-
-    }
-
-    function displayHome():void {
-      router.ActiveLink = "home";
-
-      
-
-    }
-
-    function displayAbout():void{
-        
-    }
+  let linkData:string;
 
     function testFullName():void{
       let messageArea = $("#messageArea").hide();
@@ -196,24 +90,13 @@ function loadFooter():void{
               );
             }
           }
-          loadLink("contact");
+          location.href = "/contact";
       });
-    }
-
-    function displayServices():void{
-        
-    }
-
-    function displayProjects():void{
-        
     }
 
     function displayContactList():void {
 
       authGuard();
-
-
-      //$("#contactListLink").attr("class", "nav-link");
 
       if (localStorage.length > 0) {
         let contactList = document.getElementById("contactList");
@@ -245,24 +128,26 @@ function loadFooter():void{
         contactList.innerHTML = data;
         
         $("button.edit").on("click", function(){
-          loadLink("edit", $(this).val().toString());
+          location.href = "/edit/" + $(this).val().toString();
         });
         //fix list when deleting
         $("button.delete").on("click", function(){
           if(confirm("Are you sure?")){
             localStorage.removeItem($(this).val().toString());
           }
-          loadLink("contact-list");
+          //loadLink("contact-list");
+          location.href = "/contact-list";
         });
       }
 
       $("#addButton").on("click", function(){
-        loadLink("edit");
+        location.href = "/edit"
       });
     }
 
     function displayEdit():void{
-      let key = router.LinkData;
+      
+      let key = $("body")[0].dataset.contactid;
 
       let contact = new core.Contact();
 
@@ -296,12 +181,13 @@ function loadFooter():void{
             //add to local storage
             localStorage.setItem(key, contact.serialize());
           }
-          loadLink("contact-list");
+          linkData = "";
+          location.href = "/contact-list";
         //}
       });
 
       $("#cancelButton").on("click", function(){
-        loadLink("contact-list");
+        location.href = "/contact-list";
       });
     }
 
@@ -329,8 +215,7 @@ function loadFooter():void{
             sessionStorage.setItem("user", newUser.serialize());
             
             messageArea.removeAttr("class").hide();
-
-            loadLink("contact-list");
+            location.href = "contact-list";
           }
           else
           {
@@ -344,92 +229,52 @@ function loadFooter():void{
       $("#cancelButton").on("click", function(){
 
         document.forms[0].reset();
-        loadLink("home");
+        location.href = "/home";
       });
-    }
-
-    function displayRegister():void{
-
-    }
-
-    function displayLogout():void{
-      let contactListLink = $("#contactListLink")[0];
-
-      //logged in?
-      if (sessionStorage.getItem("user")) {
-        $("#loginListItem").html(
-          `<a id="logout" class="nav-link" aria-current="page" href="#"><i class="fas fa-sign-out-alt fa-lg"></i> Logout</a>`
-        );
-
-        
-        //add contact link if does not exist
-        if(!contactListLink){
-          $(`<li id="contactListLink" class="nav-item">
-          <a id="contact-list" class="nav-link" aria-current="page"><i class="fas fa-users fa-lg"></i> Contact List</a>
-          </li>`).insertBefore("#loginListItem");
-
-        }
-
-      }
-      else{
-        // $(`<li id="loginListItem" class="nav-item">
-        // <a id="login" class="nav-link" aria-current="page" href="#"><i class="fas fa-sign-in-alt fa-lg"></i> Login</a>
-        // </li>`).insertBefore("#loginListItem");
-        $("#loginListItem").html(
-          `<a id="login" class="nav-link" aria-current="page" href="#"><i class="fas fa-sign-in-alt fa-lg"></i> Login</a>`
-        );
-
-        //add contact link if exist
-        if(contactListLink){
-          $("#contactListLink").remove();
-
-        }
-      }
-
-      addLinkEvents();
-      highlightActiveLink(router.ActiveLink);
     }
 
     function authGuard():void{
       if (!sessionStorage.getItem("user")) {
         //redirect to login page
-        loadLink("login");
+        location.href = "/login";
       }
     }
 
-    function display404():void{
-
+    function PerformLogout():void{
+      sessionStorage.clear();
+      location.href = "/login";
     }
+
 /**
  * this function associates a related callback to a route
  *
  * @param {string} activeLink
  * @return {function}  {Function}
  */
-function CallBack(activeLink:string):Function{
-      switch (activeLink) {
-        case "home": return displayHome;
-        case "about":  return displayAbout;
-        case "contact": return displayContact;
-        case "services": return displayServices;
-        case "projects": return displayProjects
-        case "contact-list": return displayContactList;
-        case "edit": return displayEdit;
-        case "login": return displayLogin;
-        case "register": return displayRegister;
-        case "404": return display404;
-        default: 
-          break;
-      }
-    }
 
     function Start():void {
       console.log("App started...");
 
-      loadHeader(router.ActiveLink);
-      loadContent(router.ActiveLink, CallBack(router.ActiveLink));
-      loadFooter();
-
+      let pageId = $("body")[0].getAttribute("id");
+      switch (pageId) {
+        case 'contact':
+          displayContact();
+          break;
+        case 'contact-list':
+          displayContactList();
+          break;
+        case 'edit':
+          displayEdit();
+          break;
+        case 'login':
+          displayLogin();
+          break;
+        case 'logout':
+          PerformLogout();
+          break;
+      
+        
+      }
   }
 
   window.addEventListener("load", Start);

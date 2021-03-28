@@ -24,7 +24,7 @@ app.use(function (err, req, res, next) {
     let message = err.message;
     let error = req.app.get('env') === 'development' ? err : {};
     res.status(err.status || 500);
-    res.render('error', { message: message, error: error });
+    res.render('error', { message: message, error: error, title: 'ERROR', page: 'error' });
 });
 module.exports = app;
 //# sourceMappingURL=app.js.map
