@@ -99,7 +99,7 @@ var core;
     function displayEdit() {
         let key = $("body")[0].dataset.contactid;
         let contact = new core.Contact();
-        if (key == undefined && key != "") {
+        if (key != undefined && key != "") {
             contact.deserialize(localStorage.getItem(key));
             $("#fullName").val(contact.FullName);
             $("#contactNumber").val(contact.ContactNumber);

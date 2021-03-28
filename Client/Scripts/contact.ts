@@ -106,7 +106,7 @@ namespace core{
      * @return {void}
      */
     public deserialize(data:string): void{
-        let propertyArray = data.split(",");
+        let propertyArray:string[] = data.split(",");
         this.FullName = propertyArray[0];
         this.ContactNumber = propertyArray[1];
         this.EmailAddress = propertyArray[2];

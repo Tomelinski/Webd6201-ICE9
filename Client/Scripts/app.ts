@@ -151,7 +151,7 @@ namespace core {
 
       let contact = new core.Contact();
 
-      if (key == undefined && key != ""){
+      if (key != undefined && key != ""){
         contact.deserialize(localStorage.getItem(key));
         
         $("#fullName").val(contact.FullName);
